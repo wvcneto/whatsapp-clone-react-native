@@ -1,40 +1,52 @@
 import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
+import { modifyName, modifyEmail, modifyPassword } from '../actions/AuthActions';
+
+const bg = require('../imgs/bg.png');
 
 const formSignin = props => {
-    return(
+  return (
+    <ImageBackground source={bg} style={styles.bg}>
       <View style={styles.container}>
-          <View style={styles.top}>
-              <Text style={styles.textLogo}>Cadastro</Text>
+        <View style={styles.top}>
+          <Text style={styles.textLogo}>Cadastro</Text>
+        </View>
+        <View style={styles.middle}>
+          <TextInput
+            value={props.name}
+            placeholder="Nome"
+            style={styles.textInput}
+            onChangeText={text => props.modifyName(text)}
+          />
+          <TextInput
+            value={props.email}
+            placeholder="E-mail"
+            style={styles.textInput}
+            onChangeText={text => props.modifyEmail(text)}
+          />
+          <TextInput
+            secureTextEntry
+            value={props.password}
+            placeholder="Senha"
+            style={styles.textInput}
+            onChangeText={text => props.modifyPassword(text)}
+          />
+        </View>
+        <View style={styles.bottom}>
+          <View style={styles.button}>
+            <Button title="Cadastrar" color="#115E54" onPress={() => false} />
           </View>
-          <View style={styles.middle}>
-            <TextInput 
-              value={props.name} 
-              placeholder="Nome" 
-              style={styles.textInput} 
-            />
-            <TextInput 
-              value={props.email}
-              placeholder="E-mail" 
-              style={styles.textInput} 
-            />
-            <TextInput 
-              value={props.password}
-              placeholder="Senha" 
-              style={styles.textInput} 
-            />
-          </View>
-          <View style={styles.bottom}>
-            <View style={styles.button}>
-              <Button title="Cadastrar" color="#115E54" onPress={() => false} />
-            </View>
-          </View>
+        </View>
       </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  bg: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     padding: 10,
@@ -46,6 +58,8 @@ const styles = StyleSheet.create({
   },
   textLogo: {
     fontSize: 25,
+    backgroundColor: 'transparent',
+    color: '#fff',
   },
   middle: {
     flex: 2,
@@ -55,9 +69,9 @@ const styles = StyleSheet.create({
   },
   textInput: {
     fontSize: 20,
-    height: 45, 
-  },  
-  button:{
+    height: 45,
+  },
+  button: {
     backgroundColor: '#115E54' //IOS Color/Button
   },
 });
@@ -68,4 +82,4 @@ const mapStateToProps = state => ({
   password: state.AuthReducer.password,
 });
 
-export default connect(mapStateToProps, null)(formSignin);
+export default connect(mapStateToProps, { modifyName, modifyEmail, modifyPassword })(formSignin);

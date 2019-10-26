@@ -6,51 +6,59 @@ import {
   Button,
   StyleSheet,
   TouchableHighlight,
+  ImageBackground,
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux'; // conexão react e redux
 import { modifyEmail, modifyPassword } from '../actions/AuthActions';
 
+const bg = require('../imgs/bg.png');
+
 //Decorator => adicionar comportamentos a um OBJETO já existente em tempo de execução.
 
 // Componente Funcional
 const formLogin = props => {
-  console.log(props);
   return (
-    <View style={styles.container}>
-      <View style={styles.top}>
-        <Text style={styles.textLogo}>WhatsApp Clone</Text>
-      </View>
-      <View style={styles.middle}>
-        <TextInput 
-          value={props.email} 
-          style={styles.textInput} 
-          placeholder="E-mail"  
-          onChangeText={ text => props.modifyEmail(text) }
-        />
-        <TextInput
-          value={props.password}
-          style={styles.textInput} 
-          placeholder="Senha" 
-          onChangeText={ text => props.modifyPassword(text) }
-        />
-        <TouchableHighlight onPress={() => Actions.formSignup()}>
-          <Text style={styles.textSignup}>
-            Ainda não tem cadastro? Cadastre-se
+    <ImageBackground source={bg} style={styles.bg}>
+      <View style={styles.container}>
+        <View style={styles.top}>
+          <Text style={styles.textLogo}>WhatsApp Clone</Text>
+        </View>
+        <View style={styles.middle}>
+          <TextInput
+            value={props.email}
+            style={styles.textInput}
+            placeholder="E-mail"
+            onChangeText={text => props.modifyEmail(text)}
+          />
+          <TextInput
+            secureTextEntry
+            value={props.password}
+            style={styles.textInput}
+            placeholder="Senha"
+            onChangeText={text => props.modifyPassword(text)}
+          />
+          <TouchableHighlight onPress={() => Actions.formSignup()}>
+            <Text style={styles.textSignup}>
+              Ainda não tem cadastro? Cadastre-se
           </Text>
-        </TouchableHighlight>
-      </View>
-      <View style={styles.bottom}>
-        <View style={styles.button}>
-          <Button title="Acessar" color={'#115E54'} onPress={() => false} />
+          </TouchableHighlight>
+        </View>
+        <View style={styles.bottom}>
+          <View style={styles.button}>
+            <Button title="Acessar" color={'#115E54'} onPress={() => false} />
+          </View>
         </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 // Styles
 const styles = StyleSheet.create({
+  bg:{
+    flex: 1,
+  },
   container: {
     flex: 1,
     padding: 10,
@@ -62,6 +70,8 @@ const styles = StyleSheet.create({
   },
   textLogo: {
     fontSize: 25,
+    color: '#fff',
+    backgroundColor: 'transparent',
   },
   middle: {
     flex: 2,
@@ -75,6 +85,7 @@ const styles = StyleSheet.create({
   },
   textSignup: {
     fontSize: 14,
+    color: '#fff',
   },
   button: {
     backgroundColor: '#115E54', //IOS Color/Button
