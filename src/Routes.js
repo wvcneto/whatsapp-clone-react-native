@@ -6,9 +6,9 @@ import FormSignup from './components/FormSignup';
 
 export default props => (
     <Router>
-      <Stack>
-        <Scene key='formLogin' component={FormLogin} title="Login" />
-        <Scene key='formSignup' component={FormSignup} title="Sign up" />
+      <Stack key="root">
+        <Scene key='formLogin' component={FormLogin} title="Login" titleStyle={{ flex: 1, textAlign: 'center' }}/>
+        <Scene key='formSignup' component={FormSignup} title="Sign up" titleStyle={{ flex: 1, textAlign: 'center',              marginRight: 70 }}/>
       </Stack>
     </Router>
 );
