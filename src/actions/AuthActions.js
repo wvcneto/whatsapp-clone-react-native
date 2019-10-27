@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import {Actions} from 'react-native-router-flux';
 
 export const modifyName = (text) => {
   return (
@@ -44,13 +45,14 @@ export const registerUser = ({ name, email, password }) => { // Async
 
 export const registerDone = (dispatch) => { // Callback 
   dispatch({
-    type: 'sucess'
+    type: 'register_sucess'
   });
+  Actions.welcome();
 }
 
 export const registerFail = (erro, dispatch) => { // Callback
   dispatch ({
-    type: 'erro',
+    type: 'register_erro',
     payload: erro.message,
   });
 }

@@ -22,8 +22,12 @@ export default (state = INITIAL_STATE, action) => {
     case 'modify_password':
       return {...state, password: action.payload}; 
       // altera password sem alterar as demais keys (clona todas e altera especifica)
-    case 'erro':
+    case 'register_sucess':
+      return {...state, password: ''};
+      // Apagar a senha para a tela do login
+    case 'register_erro':
       return {...state, erro: action.payload};
+      // Altera a mensagem de erro
   }
   return state;
 }
