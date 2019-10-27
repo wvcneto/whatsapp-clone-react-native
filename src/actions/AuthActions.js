@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import {Actions} from 'react-native-router-flux';
+import b64 from 'base-64';
 
 export const modifyName = (text) => {
   return (
@@ -35,7 +36,15 @@ export const registerUser = ({ name, email, password }) => { // Async
     
   //Registro de User no firebase
   firebase.auth().createUserWithEmailAndPassword(email, password)//Sync(ações do firebase) // Configurado em App
-  .then(user => registerDone(dispatch)) // Promisses a serem executadas após a função em questão
+  .then(user => {
+
+    let emailB64 = b64.encode(email); // Transforma o email em (cript)base64
+
+    firebase.database().ref(`/contacts/${emailB64}`) // Interpolação de string
+      .push({ name }) // Referencia para chave de obj json
+      .then(value => registerDone(dispatch)); // Passa resposta para callback
+
+  }) // Promisses a serem executadas após a função em questão
   //.then() varios tipos de teste
   .catch(erro => registerFail(erro, dispatch)); // """""""""" Promisses e Callback
 
