@@ -1,12 +1,14 @@
 const INITIAL_STATE = {
   name: '',
   email: '',
-  password: ''
+  password: '',
+  erro: ''
 }
 
 // o state jamais é definido diretamente (a single source of truth)
 
 export default (state = INITIAL_STATE, action) => {
+  console.log(action);
   switch(action.type){
 
     case 'modify_name':
@@ -20,7 +22,8 @@ export default (state = INITIAL_STATE, action) => {
     case 'modify_password':
       return {...state, password: action.payload}; 
       // altera password sem alterar as demais keys (clona todas e altera especifica)
-
+    case 'erro':
+      return {...state, erro: action.payload};
   }
   return state;
 }

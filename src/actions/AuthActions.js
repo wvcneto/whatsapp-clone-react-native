@@ -30,23 +30,27 @@ export const modifyPassword = (text) => {
 
 export const registerUser = ({ name, email, password }) => { // Async
 
+  return dispatch => {
+    
   //Registro de User no firebase
   firebase.auth().createUserWithEmailAndPassword(email, password)//Sync(ações do firebase) // Configurado em App
-    .then(user => registerDone()) // Promisses a serem executadas após a função em questão
-    //.then() varios tipos de teste
-    .catch(erro => registerFail(erro)); // """""""""" Promisses e Callback
+  .then(user => registerDone(dispatch)) // Promisses a serem executadas após a função em questão
+  //.then() varios tipos de teste
+  .catch(erro => registerFail(erro, dispatch)); // """""""""" Promisses e Callback
 
-  return (
-    {
-      type: 'registerUser',
-    }
-  );
+  }
+
 }
 
-export const registerDone = () => { // Callback 
-  console.log("Usuário cadastrado com sucesso!");
+export const registerDone = (dispatch) => { // Callback 
+  dispatch({
+    type: 'sucess'
+  });
 }
 
-export const registerFail = (erro) => { // Callback
-  console.log(erro);
+export const registerFail = (erro, dispatch) => { // Callback
+  dispatch ({
+    type: 'erro',
+    payload: erro.message,
+  });
 }

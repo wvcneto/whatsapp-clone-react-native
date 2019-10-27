@@ -43,6 +43,7 @@ class FormSignup extends React.Component {
               style={styles.textInput}
               onChangeText={text => this.props.modifyPassword(text)}
             />
+            <Text style={styles.textErro}>{this.props.erro}</Text>
           </View>
           <View style={styles.bottom}>
             <View style={styles.button}>
@@ -83,6 +84,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     height: 45,
   },
+  textErro: {
+    fontSize: 14,
+    color: 'red',
+  },
   button: {
     backgroundColor: '#115E54' //IOS Color/Button
   },
@@ -92,6 +97,7 @@ const mapStateToProps = state => ({
   name: state.AuthReducer.name,
   email: state.AuthReducer.email,
   password: state.AuthReducer.password,
+  erro: state.AuthReducer.erro,
 });
 
 export default connect(mapStateToProps, { modifyName, modifyEmail, modifyPassword, registerUser })(FormSignup);

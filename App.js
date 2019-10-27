@@ -1,6 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import ReduxThunk from 'redux-thunk';
 
 import firebase from 'firebase';
 
@@ -10,7 +11,7 @@ import reducers from './src/reducers'; // index
  class App extends React.Component{
    componentDidMount(){
     let firebaseConfig = {
-      apiKey: "AIzaSyC6_tIGySsDlGpAkJujOu20h3VkOfz3QEs",
+      apiKey: "AIzaSyC6_tIGySsDlGpAkJujOu20h3VkOfz3QEs", // Sim está exposto :)
       authDomain: "whats-clone-896d2.firebaseapp.com",
       databaseURL: "https://whats-clone-896d2.firebaseio.com",
       projectId: "whats-clone-896d2",
@@ -24,7 +25,7 @@ import reducers from './src/reducers'; // index
    }
    render(){
     return(
-      <Provider store={createStore(reducers)}>
+      <Provider store={createStore(reducers, {}, applyMiddleware(ReduxThunk))}>
         <Routes />
       </Provider>
     );
