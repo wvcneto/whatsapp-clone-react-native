@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, ImageBackground, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { modifyName, modifyEmail, modifyPassword, registerUser } from '../actions/AuthActions';
 
@@ -16,6 +16,16 @@ class FormSignup extends React.Component {
     this.props.registerUser({name, email, password}); // chave/valor
 
   }  
+  renderBtnRegister(){
+    if(this.props.loading){
+      return(
+        <ActivityIndicator size="large" />
+      );
+    }
+    return(
+      <Button title="Cadastrar" color="#115E54" onPress={() => this._registerUser()} />
+    );
+  }
   render() {
     return (
       <ImageBackground source={bg} style={styles.bg}>
@@ -47,7 +57,7 @@ class FormSignup extends React.Component {
           </View>
           <View style={styles.bottom}>
             <View style={styles.button}>
-              <Button title="Cadastrar" color="#115E54" onPress={() => this._registerUser()} />
+              {this.renderBtnRegister()}
             </View>
           </View>
         </View>
@@ -107,6 +117,7 @@ const mapStateToProps = state => ({
   email: state.AuthReducer.email,
   password: state.AuthReducer.password,
   erro: state.AuthReducer.erro,
+  loading: state.AuthReducer.loading
 });
 
 export default connect(mapStateToProps, { modifyName, modifyEmail, modifyPassword, registerUser })(FormSignup);

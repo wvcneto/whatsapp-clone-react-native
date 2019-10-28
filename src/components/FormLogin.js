@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableHighlight,
   ImageBackground,
+  ActivityIndicator,
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux'; // conexão react e redux
@@ -18,12 +19,22 @@ const bg = require('../imgs/bg.png');
 
 // Componente Funcional
 class formLogin extends React.Component {
-  _authUser(){
-    const {email, password} = this.props;
+  _authUser() {
+    const { email, password } = this.props;
 
     this.props.authUser({ email, password });
   }
-  render(){
+  renderBtnLogin() {
+    if(this.props.loading){
+      return(
+        <ActivityIndicator size="large"/>
+      );
+    }
+    return (
+      <Button title="Entrar" color={'#115E54'} onPress={() => this._authUser()} />
+    );
+  }
+  render() {
     return (
       <ImageBackground source={bg} style={styles.bg}>
         <View style={styles.container}>
@@ -53,7 +64,7 @@ class formLogin extends React.Component {
           </View>
           <View style={styles.bottom}>
             <View style={styles.button}>
-              <Button title="Entrar" color={'#115E54'} onPress={() => this._authUser()} />
+              {this.renderBtnLogin()}
             </View>
           </View>
         </View>
@@ -64,7 +75,7 @@ class formLogin extends React.Component {
 
 // Styles
 const styles = StyleSheet.create({
-  bg:{
+  bg: {
     flex: 1,
   },
   container: {
@@ -119,6 +130,7 @@ const mapStateToProps = state => ({
   email: state.AuthReducer.email,
   password: state.AuthReducer.password,
   erro: state.AuthReducer.erro,
+  loading: state.AuthReducer.loading,
 });
 
 // implementando decorator React/Redux

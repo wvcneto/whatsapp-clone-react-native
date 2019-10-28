@@ -8,11 +8,11 @@ import Main from './components/Main';
 
 export default props => (
     <Router>
-      <Stack key="root">
-        <Scene initial key='formLogin' component={FormLogin} title="Login" titleStyle={{ flex: 1, textAlign: 'center' }} />
-        <Scene key='formSignup' component={FormSignup} title="Sign up" titleStyle={{ flex: 1, textAlign: 'center' }} />
-        <Scene key='welcome' component={Welcome} title="Welcome" titleStyle={{ flex: 1, textAlign: 'center' }} />
-        <Scene key='main' component={Main} title="Main" titleStyle={{ flex: 1, textAlign: 'center' }} />
+      <Stack key="root" navigationBarStyle={ {backgroundColor: '#115E54'}} titleStyle={{ flex: 1,color:'#fff', marginLeft: 90 }}>
+        <Scene initial key='formLogin' component={FormLogin} hideNavBar={true} title="Login" />
+        <Scene key='formSignup' component={FormSignup} hideNavBar={false} title="Sign up" />
+        <Scene key='welcome' component={Welcome} hideNavBar={true} title="Welcome" />
+        <Scene key='main' component={Main} hideNavBar={true} title="Main" />
       </Stack>
     </Router>
 );

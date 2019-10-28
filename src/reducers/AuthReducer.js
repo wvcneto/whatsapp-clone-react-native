@@ -1,8 +1,19 @@
+import { 
+  MODIFY_NAME,
+  MODIFY_EMAIL,
+  MODIFY_PASSWORD,
+  REGISTER_DONE,
+  REGISTER_FAIL,
+  AUTH_DONE, AUTH_FAIL,
+  LOADING_INDICATOR
+} from '../actions/Types';
+
 const INITIAL_STATE = {
   name: '',
   email: '',
   password: '',
-  erro: ''
+  erro: '',
+  loading: false,
 }
 
 // o state jamais é definido diretamente (a single source of truth)
@@ -10,29 +21,31 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   console.log(action);
   switch(action.type){
-    case 'modify_name':
+    case MODIFY_NAME:
       return {...state, name: action.payload}; 
       // operador spread(...) permite "espalhar" elementos de um array/object[babel]
 
-    case 'modify_email':
+    case MODIFY_EMAIL:
       return {...state, email: action.payload}; 
       // evolui state por meio do spread + payload da action
 
-    case 'modify_password':
+    case MODIFY_PASSWORD:
       return {...state, password: action.payload}; 
       // altera password sem alterar as demais keys (clona todas e altera especifica)
-    case 'register_done':
-      return {...state,name: '', password: '', erro: ''};
+    case REGISTER_DONE:
+      return {...state,name: '', password: '', erro: '', loading: false};
       // Apagar a senha para a tela do login
-    case 'register_fail':
-      return {...state, erro: action.payload};
+    case REGISTER_FAIL:
+      return {...state, erro: action.payload, loading: false};
       // Altera a mensagem de erro
-    case 'auth_done':
-      return {...state, erro: ''};
+    case AUTH_DONE:
+      return {...state, erro: '', loading: false};
       // Altera a mensagem de erro  
-    case 'auth_fail':
-      return {...state, erro: action.payload};
+    case AUTH_FAIL:
+      return {...state, erro: action.payload, loading: false};
       // Altera a mensagem de erro  
+    case LOADING_INDICATOR:
+      return {...state, loading: true};
   }
   return state;
 }

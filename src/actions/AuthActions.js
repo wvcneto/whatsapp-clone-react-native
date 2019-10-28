@@ -2,10 +2,20 @@ import firebase from 'firebase';
 import {Actions} from 'react-native-router-flux';
 import b64 from 'base-64';
 
+import { 
+  MODIFY_NAME,
+  MODIFY_EMAIL,
+  MODIFY_PASSWORD,
+  REGISTER_DONE,
+  REGISTER_FAIL,
+  AUTH_DONE, AUTH_FAIL,
+  LOADING_INDICATOR
+} from './Types';
+
 export const modifyName = (text) => {
   return (
     {
-      type: 'modify_name',
+      type: MODIFY_NAME,
       payload: text,
     }
   );
@@ -14,7 +24,7 @@ export const modifyName = (text) => {
 export const modifyEmail = (text) => {
   return (
     {
-      type: 'modify_email', // Key da action que define como será evoluida a aplicação/action.
+      type: MODIFY_EMAIL, // Key da action que define como será evoluida a aplicação/action.
       // dados a serem passados [payload] key/value para o reducer e então evoluir o estado da aplicação.
       payload: text,
     }
@@ -24,7 +34,7 @@ export const modifyEmail = (text) => {
 export const modifyPassword = (text) => {
   return (
     {
-      type: 'modify_password',
+      type: MODIFY_PASSWORD,
       payload: text,
     }
   );
@@ -35,6 +45,8 @@ export const registerUser = ({ name, email, password }) => { // Async
     //Registro de User no firebase
     firebase.auth().createUserWithEmailAndPassword(email, password)//Sync(ações do firebase) // Configurado em App
     .then(user => {
+
+      dispatch({type: LOADING_INDICATOR}); // LOADING
 
       let emailB64 = b64.encode(email); // Transforma o email em (cript)base64
 
@@ -52,20 +64,23 @@ export const registerUser = ({ name, email, password }) => { // Async
 
 export const registerDone = (dispatch) => { // Callback 
   dispatch({
-    type: 'register_done'
+    type: REGISTER_DONE
   });
   Actions.welcome();
 }
 
 export const registerFail = (dispatch, erro) => { // Callback
   dispatch ({
-    type: 'register_fail',
+    type: REGISTER_FAIL,
     payload: erro.message,
   });
 }
 
 export const authUser = ({email, password}) => {  
-  return dispatch => {    
+  return dispatch => {  
+
+    dispatch({type: LOADING_INDICATOR}); // LOADING
+
     firebase.auth().signInWithEmailAndPassword(email, password)
     .then(value => authDone(dispatch))
     .catch(erro => authFail(dispatch, erro));    
@@ -74,14 +89,14 @@ export const authUser = ({email, password}) => {
 
 export const authDone = (dispatch) => {
   dispatch({
-    type: 'auth_done',
+    type: AUTH_DONE,
   });
   Actions.main();
 }
 
 export const authFail = (dispatch, erro) => {
   dispatch({
-    type: 'auth_fail',
+    type: AUTH_FAIL,
     payload: erro.message,
   });
 }
