@@ -10,49 +10,57 @@ import {
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux'; // conexão react e redux
-import { modifyEmail, modifyPassword } from '../actions/AuthActions';
+import { modifyEmail, modifyPassword, authUser } from '../actions/AuthActions';
 
 const bg = require('../imgs/bg.png');
 
 //Decorator => adicionar comportamentos a um OBJETO já existente em tempo de execução.
 
 // Componente Funcional
-const formLogin = props => {
-  return (
-    <ImageBackground source={bg} style={styles.bg}>
-      <View style={styles.container}>
-        <View style={styles.top}>
-          <Text style={styles.textLogo}>WhatsApp Clone</Text>
-        </View>
-        <View style={styles.middle}>
-          <TextInput
-            value={props.email}
-            style={styles.textInput}
-            placeholder="E-mail"
-            onChangeText={text => props.modifyEmail(text)}
-          />
-          <TextInput
-            secureTextEntry
-            value={props.password}
-            style={styles.textInput}
-            placeholder="Senha"
-            onChangeText={text => props.modifyPassword(text)}
-          />
-          <TouchableHighlight onPress={() => Actions.formSignup()}>
-            <Text style={styles.textSignup}>
-              Ainda não tem cadastro? Cadastre-se
-          </Text>
-          </TouchableHighlight>
-        </View>
-        <View style={styles.bottom}>
-          <View style={styles.button}>
-            <Button title="Acessar" color={'#115E54'} onPress={() => false} />
+class formLogin extends React.Component {
+  _authUser(){
+    const {email, password} = this.props;
+
+    this.props.authUser({ email, password });
+  }
+  render(){
+    return (
+      <ImageBackground source={bg} style={styles.bg}>
+        <View style={styles.container}>
+          <View style={styles.top}>
+            <Text style={styles.textLogo}>WhatsApp Clone</Text>
+          </View>
+          <View style={styles.middle}>
+            <TextInput
+              value={this.props.email}
+              style={styles.textInput}
+              placeholder="E-mail"
+              onChangeText={text => this.props.modifyEmail(text)}
+            />
+            <TextInput
+              secureTextEntry
+              value={this.props.password}
+              style={styles.textInput}
+              placeholder="Senha"
+              onChangeText={text => this.props.modifyPassword(text)}
+            />
+            <Text style={styles.textErro}>{this.props.erro}</Text>
+            <TouchableHighlight onPress={() => Actions.formSignup()}>
+              <Text style={styles.textSignup}>
+                Ainda não tem cadastro? Cadastre-se
+            </Text>
+            </TouchableHighlight>
+          </View>
+          <View style={styles.bottom}>
+            <View style={styles.button}>
+              <Button title="Entrar" color={'#115E54'} onPress={() => this._authUser()} />
+            </View>
           </View>
         </View>
-      </View>
-    </ImageBackground>
-  );
-};
+      </ImageBackground>
+    );
+  }
+}
 
 // Styles
 const styles = StyleSheet.create({
@@ -82,6 +90,19 @@ const styles = StyleSheet.create({
   textInput: {
     fontSize: 20,
     height: 45,
+    padding: 5,
+    marginTop: 5,
+    marginBottom: 5,
+    backgroundColor: '#fff',
+    borderWidth: 2,
+    borderRadius: 5,
+    borderColor: '#115555',
+
+  },
+  textErro: {
+    fontSize: 14,
+    color: 'red',
+    marginBottom: 2,
   },
   textSignup: {
     fontSize: 14,
@@ -97,7 +118,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   email: state.AuthReducer.email,
   password: state.AuthReducer.password,
+  erro: state.AuthReducer.erro,
 });
 
 // implementando decorator React/Redux
-export default connect(mapStateToProps, { modifyEmail, modifyPassword })(formLogin); // connect(Recursos a Decorar)(Componente a Decorar)
+export default connect(mapStateToProps, { modifyEmail, modifyPassword, authUser })(formLogin); // connect(Recursos a Decorar)(Componente a Decorar)

@@ -83,10 +83,19 @@ const styles = StyleSheet.create({
   textInput: {
     fontSize: 20,
     height: 45,
+    padding: 5,
+    marginTop: 5,
+    marginBottom: 5,
+    backgroundColor: '#fff',
+    borderWidth: 2,
+    borderRadius: 5,
+    borderColor: '#115555',
+
   },
   textErro: {
     fontSize: 14,
     color: 'red',
+    marginBottom: 2,
   },
   button: {
     backgroundColor: '#115E54' //IOS Color/Button

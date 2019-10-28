@@ -31,22 +31,20 @@ export const modifyPassword = (text) => {
 }
 
 export const registerUser = ({ name, email, password }) => { // Async
+  return dispatch => {    
+    //Registro de User no firebase
+    firebase.auth().createUserWithEmailAndPassword(email, password)//Sync(ações do firebase) // Configurado em App
+    .then(user => {
 
-  return dispatch => {
-    
-  //Registro de User no firebase
-  firebase.auth().createUserWithEmailAndPassword(email, password)//Sync(ações do firebase) // Configurado em App
-  .then(user => {
+      let emailB64 = b64.encode(email); // Transforma o email em (cript)base64
 
-    let emailB64 = b64.encode(email); // Transforma o email em (cript)base64
-
-    firebase.database().ref(`/contacts/${emailB64}`) // Interpolação de string
+      firebase.database().ref(`/contacts/${emailB64}`) // Interpolação de string
       .push({ name }) // Referencia para chave de obj json
       .then(value => registerDone(dispatch)); // Passa resposta para callback
 
-  }) // Promisses a serem executadas após a função em questão
-  //.then() varios tipos de teste
-  .catch(erro => registerFail(erro, dispatch)); // """""""""" Promisses e Callback
+    }) // Promisses a serem executadas após a função em questão
+    //.then() varios tipos de teste
+    .catch(erro => registerFail(dispatch, erro)); // """""""""" Promisses e Callback
 
   }
 
@@ -54,14 +52,36 @@ export const registerUser = ({ name, email, password }) => { // Async
 
 export const registerDone = (dispatch) => { // Callback 
   dispatch({
-    type: 'register_sucess'
+    type: 'register_done'
   });
   Actions.welcome();
 }
 
-export const registerFail = (erro, dispatch) => { // Callback
+export const registerFail = (dispatch, erro) => { // Callback
   dispatch ({
-    type: 'register_erro',
+    type: 'register_fail',
+    payload: erro.message,
+  });
+}
+
+export const authUser = ({email, password}) => {  
+  return dispatch => {    
+    firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(value => authDone(dispatch))
+    .catch(erro => authFail(dispatch, erro));    
+  }
+}
+
+export const authDone = (dispatch) => {
+  dispatch({
+    type: 'auth_done',
+  });
+  Actions.main();
+}
+
+export const authFail = (dispatch, erro) => {
+  dispatch({
+    type: 'auth_fail',
     payload: erro.message,
   });
 }
