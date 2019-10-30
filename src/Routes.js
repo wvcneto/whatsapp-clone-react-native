@@ -9,10 +9,10 @@ import Main from './components/Main';
 export default props => (
     <Router>
       <Stack key="root" navigationBarStyle={ {backgroundColor: '#115E54'}} titleStyle={{ flex: 1,color:'#fff', marginLeft: 90 }}>
-        <Scene initial key='formLogin' component={FormLogin} hideNavBar={true} title="Login" />
-        <Scene key='formSignup' component={FormSignup} hideNavBar={false} title="Sign up" />
-        <Scene key='welcome' component={Welcome} hideNavBar={true} title="Welcome" />
-        <Scene key='main' component={Main} hideNavBar={true} title="Main" />
+        <Scene key='formLogin' component={FormLogin} hideNavBar={true} title="Login" hideNavBar={true} />
+        <Scene key='formSignup' component={FormSignup} hideNavBar={false} title="Sign up" hideNavBar={false} />
+        <Scene key='welcome' component={Welcome} hideNavBar={true} title="Welcome" hideNavBar={true} />
+        <Scene initial key='main' component={Main} hideNavBar={true} title="Main" hideNavBar={true} />
       </Stack>
     </Router>
 );

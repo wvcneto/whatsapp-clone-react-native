@@ -19,7 +19,7 @@ const INITIAL_STATE = {
 // o state jamais é definido diretamente (a single source of truth)
 
 export default (state = INITIAL_STATE, action) => {
-  console.log(action);
+  //console.log(action);
   switch(action.type){
     case MODIFY_NAME:
       return {...state, name: action.payload}; 
