@@ -22,7 +22,7 @@ export default class Main extends React.Component {
             <TabBarMenu
               {...props}
               indicatorStyle={{ backgroundColor: 'white' }}
-              style={{ backgroundColor: '#115E54', elevation: 0}}
+              style={styles.tabView}
             />
           }
           navigationState={this.state}
@@ -38,7 +38,8 @@ export default class Main extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  scene: {
-    flex: 1,
+  tabView: {
+    backgroundColor: '#115E54',
+    elevation: 0
   },
 });

@@ -6,3 +6,4 @@ export const REGISTER_FAIL = 'register_fail';
 export const AUTH_DONE = 'auth_done';
 export const AUTH_FAIL = 'auth_fail';
 export const LOADING_INDICATOR = 'loading_indicator';
+export const MODIFY_ADD_EMAIL = 'modify_add_email';

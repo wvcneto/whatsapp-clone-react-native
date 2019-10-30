@@ -1,10 +1,17 @@
 import React from 'react';
-import { View, Text} from 'react-native';
+import { View, Text, StyleSheet} from 'react-native';
 
 export default props => {
   return(
-    <View style={{Flex: 1, backgroundColor: '#fff'}}>
+    <View style={StyleSheet.container}>
       <Text>Contacts</Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff'
+  }
+});
