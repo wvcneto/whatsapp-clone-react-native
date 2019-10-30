@@ -5,6 +5,7 @@ import FormLogin from './components/FormLogin';
 import FormSignup from './components/FormSignup';
 import Welcome from './components/Welcome';
 import Main from './components/Main';
+import AddContact from './components/AddContact';
 
 export default props => (
     <Router>
@@ -13,6 +14,7 @@ export default props => (
         <Scene key='formSignup' component={FormSignup} hideNavBar={false} title="Sign up" hideNavBar={false} />
         <Scene key='welcome' component={Welcome} hideNavBar={true} title="Welcome" hideNavBar={true} />
         <Scene initial key='main' component={Main} hideNavBar={true} title="Main" hideNavBar={true} />
+        <Scene key='addContact' component={AddContact} hideNavBar={true} title="Add Contact" hideNavBar={false} />
       </Stack>
     </Router>
 );
