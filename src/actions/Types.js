@@ -7,3 +7,6 @@ export const AUTH_DONE = 'auth_done';
 export const AUTH_FAIL = 'auth_fail';
 export const LOADING_INDICATOR = 'loading_indicator';
 export const MODIFY_ADD_EMAIL = 'modify_add_email';
+export const ADD_EMAIL_CONTACT = 'add_email_contact';
+export const ADD_CONTACT_DONE = 'add_contact_done';
+export const ADD_CONTACT_FAIL = 'add_contact_fail';
