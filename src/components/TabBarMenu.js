@@ -2,10 +2,13 @@ import React from 'react';
 import { View, Text, Image, StatusBar, TouchableHighlight, StyleSheet } from 'react-native';
 import { TabBar } from 'react-native-tab-view';
 import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { enableAddContact } from '../actions/AppActions';
+
 
 const Add = require('../imgs/adicionar-contato.png');
 
-export default props => {
+const tabBarMenu = props => {
   return (
     <View style={styles.bar}>
       <StatusBar backgroundColor="#114d44" />
@@ -16,7 +19,7 @@ export default props => {
         <View style={styles.bottom}>
           <View style={styles.addButton}>
             <TouchableHighlight
-              onPress={() => Actions.addContact()}
+              onPress={() => {Actions.addContact(); props.enableAddContact()}}
               underlayColor="#114d44"
             >
               <Image source={Add} />
@@ -36,8 +39,8 @@ export default props => {
 const styles = StyleSheet.create({
   bar: {
     backgroundColor: '#115e54',
-    elevation: 3,
-    marginBottom: 3
+    elevation: 2,
+    marginBottom: 2
   },
   container: {
     flexDirection: 'row',
@@ -80,3 +83,5 @@ const styles = StyleSheet.create({
     fontSize: 18
   }
 });
+
+export default connect(null,{enableAddContact})(tabBarMenu); // Somente a action do AppActions não sendo necessári oassociar state a props

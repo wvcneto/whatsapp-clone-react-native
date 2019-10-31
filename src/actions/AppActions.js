@@ -1,5 +1,7 @@
 import b64 from 'base-64';
 import firebase from 'firebase';
+import _ from 'lodash';
+
 import { MODIFY_ADD_EMAIL, ADD_EMAIL_CONTACT, ADD_CONTACT_DONE, ADD_CONTACT_FAIL } from './Types';
 
 export const modifyAddEmail = (text) => {
@@ -19,25 +21,45 @@ export const addEmailContact = (email) => {
     firebase.database().ref(`/contacts/${emailB64}`) // Recupera dado (snapshot)
       .once('value')//on()escuta alterações no path / once() apenas realiza uma requisição / value recupera um snapshot daquele momento
       .then(snapshot => {
-        if (snapshot.val()) {
-          addContactDone(dispatch);
+        if (snapshot.val()) { //email que queremos adicionar         
+          const userData = _.first(_.values(snapshot.val()));
+          //console.log(userData);           
+          //necessário o email do usurario que está altenticado
+          const { currentUser } = firebase.auth(); // assignment destruction para pegar email do user logado
+          let currentUserB64 = b64.encode(currentUser.email); //Converte b64 
+          firebase.database().ref(`/user_contacts/${currentUserB64}`) // endereço no banco onde será salvo
+            .push({ email, name: userData.name }) // salvar os dados
+            .then(() => addContactDone(dispatch)) // em caso de sucesso
+            .catch((erro) => addContactFail(erro.message, dispatch)) // em caso de falha
+
         } else {
-          addContactFail(dispatch);
+          (erro) => addContactFail(erro, dispatch);
         }
       }) //promise da once / retorna o value do nó
   }
 }
 
-export const addContactDone = (dispatch) => {
-  dispatch({
-    type: ADD_CONTACT_DONE,
-    payload: ''
-  });
-}
+export const addContactDone = (dispatch) => (
+  dispatch(
+    {
+      type: ADD_CONTACT_DONE,
+      payload: true
+    }
+  )
+);
 
-export const addContactFail = (dispatch) => {
-  dispatch({
-    type: ADD_CONTACT_FAIL,
-    payload: 'Usuário não cadastrado.'
-  });
-}
+export const addContactFail = (dispatch, erro) => (
+  dispatch(
+    {
+      type: ADD_CONTACT_FAIL,
+      payload: erro,
+    }
+  )
+);
+
+export const enableAddContact = () => (
+  {
+    type: ADD_CONTACT_DONE,
+    payload: false
+  }
+);

@@ -3,28 +3,47 @@ import { View, TextInput, Text, Button, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { modifyAddEmail, addEmailContact } from '../actions/AppActions';
 
-const addContact = props => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.top}>
-        <TextInput
-          placeholder='Email'
-          style={styles.textInput}
-          value={props.email}
-          onChangeText={text => props.modifyAddEmail(text)} // Callback
-        />     
-        <Text style={styles.textErro}>{props.erroAdd}</Text>   
+class addContact extends React.Component {
+  renderAddContact() {
+    if (!(this.props.successAdd)) {
+      //console.log(this.props.successAdd);
+      return (        
+        <>
+          <View style={styles.top}>
+            <TextInput
+              placeholder='Email'
+              style={styles.textInput}
+              value={this.props.email}
+              onChangeText={text => this.props.modifyAddEmail(text)} // Callback
+            />
+            <Text style={styles.textErro}>{this.props.erroAdd}</Text>
+          </View>
+          <View style={styles.bottom}>
+            <Button
+              style={styles.button}
+              title="Add"
+              color="#115e54"
+              onPress={() => this.props.addEmailContact(this.props.email)}
+            />
+          </View>
+        </>
+      );
+
+    } else {
+      return (
+        <>
+          <Text style={styles.textSuccess}>Cadastro Realizado com sucesso!</Text>
+        </>
+      );
+    }
+  }
+  render() {
+    return (
+      <View style={styles.container}>
+        { this.renderAddContact() }
       </View>
-      <View style={styles.bottom}>
-        <Button
-          style={styles.button}
-          title="Add"
-          color="#115e54"
-          onPress={() => props.addEmailContact(props.email)}
-        />        
-      </View>
-    </View >
-  );
+    );
+  }
 }
 
 // Styles
@@ -57,14 +76,18 @@ const styles = StyleSheet.create({
     color: 'red',
     marginBottom: 2,
   },
+  textSuccess: {
+    fontSize: 20,
+  },
   button: {
     backgroundColor: '#115E54', //IOS Color/Button
   },
 });
 
 const mapStateToProps = state => ({
-  email: state.AppReducer.addEmail, // State redux / Reducer / variavel de estado
+  email: state.AppReducer.emailContact, // State redux / Reducer / variavel de estado
   erroAdd: state.AppReducer.erroAdd,
+  successAdd: state.AppReducer.successAdd
 });
 
-export default connect(mapStateToProps,{modifyAddEmail, addEmailContact})(addContact); // Mapeamento de estado / actionsCreator / (component)
+export default connect(mapStateToProps, { modifyAddEmail, addEmailContact })(addContact); // Mapeamento de estado / actionsCreator / (component)
