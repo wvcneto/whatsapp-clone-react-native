@@ -2,7 +2,7 @@ import b64 from 'base-64';
 import firebase from 'firebase';
 import _ from 'lodash';
 
-import { MODIFY_ADD_EMAIL, ADD_EMAIL_CONTACT, ADD_CONTACT_DONE, ADD_CONTACT_FAIL } from './Types';
+import { MODIFY_ADD_EMAIL, ADD_EMAIL_CONTACT, ADD_CONTACT_DONE, ADD_CONTACT_FAIL, LIST_USER_CONTACTS } from './Types';
 
 export const modifyAddEmail = (text) => {
   //console.log('Actions');
@@ -63,3 +63,18 @@ export const enableAddContact = () => (
     payload: false
   }
 );
+
+export const contactsUserFetch = () => {
+  const { currentUser } = firebase.auth();
+  return(dispatch) => {
+    let emailUserB64 = b64.encode( currentUser.email );
+
+    firebase.database().ref(`/user_contacts/${emailUserB64}`)
+      .on("value", (snapshot) => {
+        dispatch({
+          type: LIST_USER_CONTACTS,
+          payload: snapshot.val()
+        })
+      })
+  }
+}
