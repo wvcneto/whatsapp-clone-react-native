@@ -10,7 +10,7 @@ export default props => {
     <ImageBackground source={bg} style={styles.bg}>
       <View style={styles.container}>
         <View style={styles.top}>
-          <Text style={styles.textWelcome}>Seja Bem-Vindo!</Text>
+          <Text style={styles.textWelcome}>Welcome!</Text>
           <Image source={logo} style={styles.logo} />
         </View>
         <View style={styles.bottom}>

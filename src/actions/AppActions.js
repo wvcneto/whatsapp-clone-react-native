@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { MODIFY_ADD_EMAIL, ADD_EMAIL_CONTACT, ADD_CONTACT_DONE, ADD_CONTACT_FAIL, LIST_USER_CONTACTS } from './Types';
 
 export const modifyAddEmail = (text) => {
-  //console.log('Actions');
+  console.log('Actions');
   return {
     type: MODIFY_ADD_EMAIL,
     payload: text,
@@ -23,7 +23,6 @@ export const addEmailContact = (email) => {
       .then(snapshot => {
         if (snapshot.val()) { //email que queremos adicionar         
           const userData = _.first(_.values(snapshot.val()));
-          //console.log(userData);           
           //necessário o email do usurario que está altenticado
           const { currentUser } = firebase.auth(); // assignment destruction para pegar email do user logado
           let currentUserB64 = b64.encode(currentUser.email); //Converte b64 
@@ -33,7 +32,12 @@ export const addEmailContact = (email) => {
             .catch((erro) => addContactFail(erro.message, dispatch)) // em caso de falha
 
         } else {
-          (erro) => addContactFail(erro, dispatch);
+          dispatch(
+            { 
+                type: ADD_CONTACT_FAIL, 
+                payload: 'Unregistered email address!'
+            }
+        )
         }
       }) //promise da once / retorna o value do nó
   }
@@ -48,7 +52,7 @@ export const addContactDone = (dispatch) => (
   )
 );
 
-export const addContactFail = (dispatch, erro) => (
+export const addContactFail = (erro, dispatch) => (
   dispatch(
     {
       type: ADD_CONTACT_FAIL,

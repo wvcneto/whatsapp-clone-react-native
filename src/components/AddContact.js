@@ -32,7 +32,7 @@ class addContact extends React.Component {
     } else {
       return (
         <>
-          <Text style={styles.textSuccess}>Cadastro Realizado com sucesso!</Text>
+          <Text style={styles.textSuccess}>Contact Registered!</Text>
         </>
       );
     }

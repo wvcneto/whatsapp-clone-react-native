@@ -23,7 +23,7 @@ class FormSignup extends React.Component {
       );
     }
     return(
-      <Button title="Cadastrar" color="#115E54" onPress={() => this._registerUser()} />
+      <Button title="Save" color="#115E54" onPress={() => this._registerUser()} />
     );
   }
   render() {
@@ -31,12 +31,12 @@ class FormSignup extends React.Component {
       <ImageBackground source={bg} style={styles.bg}>
         <View style={styles.container}>
           <View style={styles.top}>
-            <Text style={styles.textLogo}>Cadastro</Text>
+            <Text style={styles.textLogo}>Sign up</Text>
           </View>
           <View style={styles.middle}>
             <TextInput
               value={this.props.name}
-              placeholder="Nome"
+              placeholder="Name"
               style={styles.textInput}
               onChangeText={text => this.props.modifyName(text)}
             />
@@ -49,7 +49,7 @@ class FormSignup extends React.Component {
             <TextInput
               secureTextEntry
               value={this.props.password}
-              placeholder="Senha"
+              placeholder="Password"
               style={styles.textInput}
               onChangeText={text => this.props.modifyPassword(text)}
             />

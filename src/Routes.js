@@ -11,10 +11,10 @@ export default props => (
     <Router>
       <Stack key="root" navigationBarStyle={ {backgroundColor: '#115E54'}} titleStyle={{ flex: 1,color:'#fff', marginLeft: 90 }}>
         <Scene key='formLogin' component={FormLogin} hideNavBar={true} title="Login" hideNavBar={true} />
-        <Scene key='formSignup' component={FormSignup} hideNavBar={false} title="Cadastro" hideNavBar={false} />
-        <Scene key='welcome' component={Welcome} hideNavBar={true} title="Bem-vindo" hideNavBar={true} />
+        <Scene key='formSignup' component={FormSignup} hideNavBar={false} title="Sign up" hideNavBar={false} />
+        <Scene key='welcome' component={Welcome} hideNavBar={true} title="Welcome" hideNavBar={true} />
         <Scene key='main' component={Main} hideNavBar={true} title="Main" hideNavBar={true} />
-        <Scene key='addContact' component={AddContact} hideNavBar={true} title="Adicionar Contato" hideNavBar={false} />
+        <Scene key='addContact' component={AddContact} hideNavBar={true} title="Add New Contact" hideNavBar={false} />
       </Stack>
     </Router>
 );

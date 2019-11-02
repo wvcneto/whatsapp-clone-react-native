@@ -24,6 +24,9 @@ class formLogin extends React.Component {
 
     this.props.authUser({ email, password });
   }
+  componentDidMount(){
+    console.disableYellowBox = true;
+  }
   renderBtnLogin() {
     if(this.props.loading){
       return(
@@ -31,7 +34,7 @@ class formLogin extends React.Component {
       );
     }
     return (
-      <Button title="Entrar" color={'#115E54'} onPress={() => this._authUser()} />
+      <Button title="login" color={'#115E54'} onPress={() => this._authUser()} />
     );
   }
   render() {
@@ -52,14 +55,14 @@ class formLogin extends React.Component {
               secureTextEntry
               value={this.props.password}
               style={styles.textInput}
-              placeholder="Senha"
+              placeholder="Password"
               onChangeText={text => this.props.modifyPassword(text)}
             />
             <Text style={styles.textErro}>{this.props.erro}</Text>
             <TouchableHighlight onPress={() => Actions.formSignup()}>
               <Text style={styles.textSignup}>
-                Ainda não tem cadastro? Cadastre-se
-            </Text>
+                Not registered yet? sign up here
+              </Text>
             </TouchableHighlight>
           </View>
           <View style={styles.bottom}>

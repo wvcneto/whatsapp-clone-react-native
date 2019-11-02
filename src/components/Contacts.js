@@ -7,32 +7,31 @@ import { contactsUserFetch } from '../actions/AppActions';
 
 class Contacts extends React.Component {
 
-  constructor(props) {
-    super(props);
-
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => { r1 !== r2 } });
-
-    this.state = {
-      dataSource: ds.cloneWithRows([
-        'Reg 1',
-        'Reg 2',
-        'Reg 3'
-      ])
-    }
-
-  }
-
-  componentDidMount() {
+  componentWillMount() {
     this.props.contactsUserFetch();
-  }
+    this.createSource( this.props.contacts )
+}
+
+componentWillReceiveProps(nextProps) {
+    this.createSource( nextProps.contacts )
+}
+
+createSource( contacts ) {
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
+
+    this.source = ds.cloneWithRows(contacts)
+}
+
 
   render() {
     return (
       <ListView
-        dataSource={this.state.dataSource}
+        enableEmptySections
+        dataSource={this.source}
         renderRow={(data) =>
           <View style={styles.container}>
-            <Text>{data}</Text>
+            <Text style={styles.titleList}>{data.name}</Text>
+            <Text style={styles.textList}>{data.email}</Text>
           </View>
         }
       />
@@ -43,16 +42,24 @@ class Contacts extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20,
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
     backgroundColor: '#fff'
+  },
+  titleList: {
+    fontSize: 25
+  },
+  textList: {
+    fontSize: 18,
   }
 });
 
 const mapStateToProps = (state) => {
-  const contacts = _.map(state, (val, uid) => {
+  const contacts = _.map(state.ListContactsReducer, (val, uid) => {
     return { ...val, uid }
   });
-  console.log(contacts);
-  return {};
+  return {contacts};
 }
 
 export default connect(mapStateToProps, { contactsUserFetch })(Contacts)
