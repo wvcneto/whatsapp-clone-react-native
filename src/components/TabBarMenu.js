@@ -3,7 +3,7 @@ import { View, Text, Image, StatusBar, TouchableHighlight, StyleSheet } from 're
 import { TabBar } from 'react-native-tab-view';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { enableAddContact } from '../actions/AppActions';
+import { allowAddContact } from '../actions/AppActions';
 
 
 const Add = require('../imgs/adicionar-contato.png');
@@ -19,7 +19,7 @@ const tabBarMenu = props => {
         <View style={styles.bottom}>
           <View style={styles.addButton}>
             <TouchableHighlight
-              onPress={() => {Actions.addContact(); props.enableAddContact()}}
+              onPress={() => {Actions.addContact(); props.allowAddContact()}}
               underlayColor="#114d44"
             >
               <Image source={Add} />
@@ -84,4 +84,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(null,{enableAddContact})(tabBarMenu); // Somente a action do AppActions não sendo necessári oassociar state a props
+export default connect(null,{allowAddContact})(tabBarMenu); // Somente a action do AppActions não sendo necessári oassociar state a props

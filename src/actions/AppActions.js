@@ -1,82 +1,169 @@
-import b64 from 'base-64';
 import firebase from 'firebase';
+import b64 from 'base-64';
 import _ from 'lodash';
 
-import { MODIFY_ADD_EMAIL, ADD_EMAIL_CONTACT, ADD_CONTACT_DONE, ADD_CONTACT_FAIL, LIST_USER_CONTACTS } from './Types';
+import {
+    MODIFY_ADD_EMAIL,
+    ADD_CONTACT_FAIL,
+    ADD_CONTACT_DONE,
+    LIST_USER_CONTACTS,
+    MODIFY_MESSAGE,
+    LIST_CONVERSATION,
+    SEND_MESSAGE_DONE,
+    LIST_CONVERSATIONS
+} from './Types';
 
-export const modifyAddEmail = (text) => {
-  return {
-    type: MODIFY_ADD_EMAIL,
-    payload: text,
-  }
+export const modifyAddEmail = text => {
+    return {
+        type: MODIFY_ADD_EMAIL,
+        payload: text
+    }
 }
 
-export const addEmailContact = (email) => {
+export const addEmailContact = email => {
 
-  return dispatch => {
-    let emailB64 = b64.encode(email); // Converte para b64 pois não pode haver caracter especial (@)
+    return dispatch => {
+        let emailB64 = b64.encode(email);
 
-    firebase.database().ref(`/contacts/${emailB64}`) // Recupera dado (snapshot)
-      .once('value')//on()escuta alterações no path / once() apenas realiza uma requisição / value recupera um snapshot daquele momento
-      .then(snapshot => {
-        if (snapshot.val()) { //email que queremos adicionar         
-          const userData = _.first(_.values(snapshot.val()));
-          //necessário o email do usurario que está altenticado
-          const { currentUser } = firebase.auth(); // assignment destruction para pegar email do user logado
-          let currentUserB64 = b64.encode(currentUser.email); //Converte b64 
-          firebase.database().ref(`/user_contacts/${currentUserB64}`) // endereço no banco onde será salvo
-            .push({ email, name: userData.name }) // salvar os dados
-            .then(() => addContactDone(dispatch)) // em caso de sucesso
-            .catch((erro) => addContactFail(erro.message, dispatch)) // em caso de falha
+        firebase.database().ref(`/contacts/${emailB64}`)
+            .once('value')
+            .then(snapshot => {
+                if (snapshot.val()) {
+                    //email do contato que queremos adicionar
+                    const userData = _.first(_.values(snapshot.val()));
+                    console.log(userData);
 
-        } else {
-          dispatch(
-            { 
-                type: ADD_CONTACT_FAIL, 
-                payload: 'Unregistered email address!'
-            }
-        )
+                    //email do usuário autenticado
+                    const { currentUser } = firebase.auth();
+                    let emailUserB64 = b64.encode(currentUser.email);
+
+                    firebase.database().ref(`/user_contacts/${emailUserB64}`)
+                        .push({ email, name: userData.name })
+                        .then(() => addEmailContactDone(dispatch))
+                        .catch(erro => addEmailContactErro(erro.message, dispatch));
+
+                } else {
+                    dispatch(
+                        {
+                            type: ADD_CONTACT_FAIL,
+                            payload: 'Unregistered email address!'
+                        }
+                    );
+                }
+            })
+    }
+}
+
+const addEmailContactErro = (erro, dispatch) => (
+    dispatch(
+        {
+            type: ADD_CONTACT_FAIL,
+            payload: erro
         }
-      }) //promise da once / retorna o value do nó
-  }
-}
+    )
+)
 
-export const addContactDone = (dispatch) => (
-  dispatch(
+const addEmailContactDone = dispatch => (
+    dispatch(
+        {
+            type: ADD_CONTACT_DONE,
+            payload: true
+        }
+    )
+)
+
+export const allowAddContact = () => (
     {
-      type: ADD_CONTACT_DONE,
-      payload: true
+        type: ADD_CONTACT_DONE,
+        payload: false
     }
-  )
-);
-
-export const addContactFail = (erro, dispatch) => (
-  dispatch(
-    {
-      type: ADD_CONTACT_FAIL,
-      payload: erro,
-    }
-  )
-);
-
-export const enableAddContact = () => (
-  {
-    type: ADD_CONTACT_DONE,
-    payload: false
-  }
-);
+)
 
 export const contactsUserFetch = () => {
-  const { currentUser } = firebase.auth();
-  return(dispatch) => {
-    let emailUserB64 = b64.encode( currentUser.email );
+    const { currentUser } = firebase.auth();
 
-    firebase.database().ref(`/user_contacts/${emailUserB64}`)
-      .on("value", (snapshot) => {
-        dispatch({
-          type: LIST_USER_CONTACTS,
-          payload: snapshot.val()
-        })
-      })
-  }
+    return (dispatch) => {
+        let emailUserB64 = b64.encode(currentUser.email);
+
+        firebase.database().ref(`/user_contacts/${emailUserB64}`)
+            .on("value", snapshot => {
+                dispatch({ type: LIST_USER_CONTACTS, payload: snapshot.val() });
+            })
+    }
+}
+
+export const modifyMessage = text => {
+    return ({
+        type: MODIFY_MESSAGE,
+        payload: text
+    })
+}
+
+export const sendMessage = (message, contactName, contactEmail) => {
+    //console.log("Mensagem:",message,", Nome:",contactName,", Email: ",contactEmail);
+    const { currentUser } = firebase.auth();
+    const userEmail = currentUser.email;
+
+    return dispatch => {
+
+        const userEmailB64 = b64.encode(userEmail);
+        const contactEmailB64 = b64.encode(contactEmail);
+
+        //registrar mensagem para contato e usuário
+        firebase.database().ref(`/messages/${userEmailB64}/${contactEmailB64}`)
+            .push({ message, type: 's' }) // tipo sended
+            .then(() => {
+                firebase.database().ref(`/messages/${contactEmailB64}/${userEmailB64}`)
+                    .push({ message, type: 'r' }) // tipo received
+                    .then(() => dispatch({ type: SEND_MESSAGE_DONE }));
+            })
+            .then(() => { //armazenar o header da conversa do usuário autenticado
+                firebase.database().ref(`/user_conversations/${userEmailB64}/${contactEmailB64}`)
+                    .set({ name: contactName, email: contactEmail });
+
+            })
+            .then(() => { //armazenar o cabeçalho de conversa do contato
+
+                firebase.database().ref(`/contacts/${userEmailB64}`)
+                    .once("value")
+                    .then(snapshot => {
+
+                        const userData = _.first(_.values(snapshot.val()));
+
+                        firebase.database().ref(`/user_conversations/${contactEmailB64}/${userEmailB64}`)
+                            .set({ name: userData.name, email: userEmail });
+                    })
+            })
+    }
+
+}
+
+export const conversationUserFetch = contactEmail => {
+
+    const { currentUser } = firebase.auth();
+
+    //emails na base64
+    let userEmailB64 = b64.encode(currentUser.email);
+    let contactEmailB64 = b64.encode(contactEmail);
+
+    return dispatch => {
+        console.log('conversationUserFetch');
+        firebase.database().ref(`/messages/${userEmailB64}/${contactEmailB64}`)
+            .on("value", snapshot => {
+                dispatch({ type: LIST_CONVERSATION, payload: snapshot.val() });
+            });
+    }
+}
+
+export const conversationsUserFetch = () => {
+    const { currentUser } = firebase.auth();
+
+    return dispatch => {
+        let userEmailB64 = b64.encode(currentUser.email);
+
+        firebase.database().ref(`/user_conversations/${userEmailB64}`)
+            .on("value", snapshot => {
+                dispatch({ type: LIST_CONVERSATIONS, payload: snapshot.val() });
+            });
+    }
 }

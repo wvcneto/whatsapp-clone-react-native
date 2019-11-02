@@ -11,3 +11,7 @@ export const ADD_EMAIL_CONTACT = 'add_email_contact';
 export const ADD_CONTACT_DONE = 'add_contact_done';
 export const ADD_CONTACT_FAIL = 'add_contact_fail';
 export const LIST_USER_CONTACTS = 'list_user_contacts';
+export const MODIFY_MESSAGE = 'modify_message';
+export const LIST_CONVERSATION = 'list_conversation';
+export const LIST_CONVERSATIONS = 'list_conversations';
+export const SEND_MESSAGE_DONE = 'send_message_done';

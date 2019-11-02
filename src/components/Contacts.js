@@ -26,7 +26,7 @@ class Contacts extends React.Component {
   renderRow(contact) {
     return (
       <TouchableHighlight
-        onPress={() => Actions.conversation()}
+        onPress={() => Actions.conversation({title: contact.name,contactName: contact.name,contactEmail: contact.email})}
       >
         <View style={styles.container}>
           <Text style={styles.titleList}>{contact.name}</Text>
