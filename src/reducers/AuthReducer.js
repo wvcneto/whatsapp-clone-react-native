@@ -36,13 +36,13 @@ export default (state = INITIAL_STATE, action) => {
       return {...state,name: '', password: '', erro: '', loading: false};
       // Apagar a senha para a tela do login
     case REGISTER_FAIL:
-      return {...state, erro: action.payload, loading: false};
+      return {...state, erro: action.payload, password: '', loading: false};
       // Altera a mensagem de erro
     case AUTH_DONE:
-      return {...state, erro: '', loading: false};
+      return {...state, erro: '', loading: false,email: '', password: ''};
       // Altera a mensagem de erro  
     case AUTH_FAIL:
-      return {...state, erro: action.payload, loading: false};
+      return {...state, erro: action.payload, password: '', loading: false};
       // Altera a mensagem de erro  
     case LOADING_INDICATOR:
       return {...state, loading: true};

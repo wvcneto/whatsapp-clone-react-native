@@ -6,7 +6,6 @@ import { modifyAddEmail, addEmailContact } from '../actions/AppActions';
 class addContact extends React.Component {
   renderAddContact() {
     if (!(this.props.successAdd)) {
-      //console.log(this.props.successAdd);
       return (        
         <>
           <View style={styles.top}>

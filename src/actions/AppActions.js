@@ -5,7 +5,6 @@ import _ from 'lodash';
 import { MODIFY_ADD_EMAIL, ADD_EMAIL_CONTACT, ADD_CONTACT_DONE, ADD_CONTACT_FAIL, LIST_USER_CONTACTS } from './Types';
 
 export const modifyAddEmail = (text) => {
-  console.log('Actions');
   return {
     type: MODIFY_ADD_EMAIL,
     payload: text,
@@ -13,7 +12,6 @@ export const modifyAddEmail = (text) => {
 }
 
 export const addEmailContact = (email) => {
-  //console.log(email);
 
   return dispatch => {
     let emailB64 = b64.encode(email); // Converte para b64 pois não pode haver caracter especial (@)
